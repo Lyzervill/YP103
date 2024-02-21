@@ -8,6 +8,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 
 class MainActivity : AppCompatActivity() {
+
     private var countLike = 0
     private var countShare = 0
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,16 +17,28 @@ class MainActivity : AppCompatActivity() {
         var textView6 = findViewById<TextView>(R.id.textView6)
         var likesTextView = findViewById<TextView>(R.id.textView10)
         var viewsTextView = findViewById<TextView>(R.id.textView7)
-
+        var y = viewsTextView.text.toString().toInt()
+        y++
+        viewsTextView.text = y.toString()
+        countLike = textView6.text.toString().toInt()
+        var bs = true
         findViewById<ImageButton>(R.id.imageButtonLike).setOnClickListener {
-            countLike+=100
+            if(bs) {
+                countLike++
+                bs = false
+            }
+            else{
+                countLike--
+                bs = true
+
+            }
             textView6.text=amountToStr(countLike)
         }
         findViewById<ImageButton>(R.id.imageButtonShare).setOnClickListener {
             countShare++
             likesTextView.text = amountToStr(countShare)
         }
-        
+
     }
         fun amountToStr(amount:Int): String {
             return when(amount)
