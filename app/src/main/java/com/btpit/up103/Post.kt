@@ -7,5 +7,5 @@ package com.btpit.up103
     val published:String,
     val content: String,
     var sharecount: Int,
-    var likedByMe: Boolean = false
+    val likedByMe: Boolean,
  )

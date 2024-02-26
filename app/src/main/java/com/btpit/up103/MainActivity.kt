@@ -3,7 +3,14 @@ package com.btpit.up103
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.btpit.up103.databinding.ActivityMainBinding
+import androidx.activity.viewModels
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStore
+import kotlin.reflect.KClass
 
 class MainActivity : AppCompatActivity() {
 
@@ -12,38 +19,59 @@ class MainActivity : AppCompatActivity() {
         val binding  = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val post= Post(
-            id = 1,
-            autor = "sdlkdklskmd",
-            content="sdwsd",
-            published = "ss",
-            likecount = 999,
-            sharecount = 999,
-            likedByMe = true
 
-        )
 
-        with(binding){
-            textViewAutor.text = post.autor
-            textViewContent.text = post.content
-            textViewLikeCount.text= post.likecount.toString()
+        val viewModel: PostViewModel by viewModels()
+        viewModel.data.observe(this){post ->
+            with(binding){
+                textViewAutor.text = post.autor
+                textViewContent.text = post.content
+                textViewLikeCount.text= post.likecount.toString()
 
 
 
-            imageButtonLike.setOnClickListener{
-                if (post.likedByMe) post.likecount++
-                else post.likecount--
-                textViewLikeCount.text= amountToStr(post.likecount)
-                post.likedByMe = !post.likedByMe
-                imageButtonLike.setImageResource(
-                    if(post.likedByMe) R.drawable.icons8__24
-                    else R.drawable._589054)
+                imageButtonLike.setOnClickListener{
+                    if (post.likedByMe) post.likecount++
+                    else post.likecount--
+                    textViewLikeCount.text= amountToStr(post.likecount)
+
+
+                    imageButtonLike.setImageResource(
+                        if(post.likedByMe) R.drawable.icons8__24
+                        else R.drawable._589054)
+                }
+                imageButtonShare.setOnClickListener{
+                    post.sharecount++
+                    textViewShareCount.text= amountToStr(post.sharecount)
+                }
             }
-            imageButtonShare.setOnClickListener{
-                post.sharecount++
-                textViewShareCount.text= amountToStr(post.sharecount)
-            }
+
         }
+
+
+    }
+    class ViewModelLazy<VM : ViewModel>(
+        private val viewModelClass: KClass<VM>,
+        private val storeProducer:() -> ViewModelStore,
+        private val factoryProducer: () -> ViewModelProvider.Factory
+    ) : Lazy<VM>{
+        private var cached: VM? = null
+
+        override val value: VM
+            get() {
+                val viewModel = cached
+                return if (viewModel == null){
+                    val factory = factoryProducer()
+                    val store = storeProducer()
+                    ViewModelProvider(store, factory).get(viewModelClass.java).also {
+                        cached = it
+                    }
+                } else {
+                    viewModel
+                }
+            }
+
+        override fun isInitialized() = cached != null
 
     }
         fun amountToStr(count:Int): String {
@@ -58,5 +86,7 @@ class MainActivity : AppCompatActivity() {
                 else -> "Более млрд"
             }
         }
+
+
 
 }
