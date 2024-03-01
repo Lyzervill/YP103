@@ -47,9 +47,8 @@ interface OnInteractionListener{
                      }
                  }.show()
              }
-             imageButtonLike.setImageResource(
-                 if(post.likedByMe) R.drawable._589054 else R.drawable.icons8__24
-             )
+             imageButtonLike.isClickable = post.likedByMe
+
             imageButtonLike.setOnClickListener {
                 onInteractionListener.onLike(post)
             }

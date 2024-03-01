@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Widget.AppTheme.LikeCheckBox" parent="Widget.MaterialComponents.Button.TextButton.Icon">
+    <item name = "iconTint">@color/like_checkbox_tont</item>
+    <item name="android:minWidth">@dimen/cardview_default_radius</item>
+    <item name="android:minHeight">@dimen/cardview_default_radius</item>
+</style>
+</resources>
