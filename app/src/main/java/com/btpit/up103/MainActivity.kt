@@ -1,13 +1,14 @@
 package com.btpit.up103
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.lifecycle.ViewModel
+import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import com.btpit.up103.databinding.ActivityMainBinding
 import androidx.activity.viewModels
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStore
-import kotlin.reflect.KClass
+
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,41 +18,69 @@ class MainActivity : AppCompatActivity() {
 
 
         val viewModel: PostViewModel by viewModels()
-        val adapter = PostsAdapter {
-            viewModel.likeById(it.id)
-        }
-        binding.container2.adapter = adapter
-        viewModel.data.observe(this) { posts ->
-            adapter.submitList(posts)
-        }
-
-
-    }
-
-    class ViewModelLazy<VM : ViewModel>(
-        private val viewModelClass: KClass<VM>,
-        private val storeProducer: () -> ViewModelStore,
-        private val factoryProducer: () -> ViewModelProvider.Factory
-    ) : Lazy<VM> {
-        private var cached: VM? = null
-
-        override val value: VM
-            get() {
-                val viewModel = cached
-                return if (viewModel == null) {
-                    val factory = factoryProducer()
-                    val store = storeProducer()
-                    ViewModelProvider(store, factory).get(viewModelClass.java).also {
-                        cached = it
-                    }
-                } else {
-                    viewModel
-                }
+        val adapter = PostsAdapter(object : OnInteractionListener{
+            override fun onEdit(post: Post) {
+                viewModel.edit(post)
             }
 
-        override fun isInitialized() = cached != null
+            override fun onLike(post: Post) {
+                viewModel.likeById(post.id)
+            }
+
+            override fun onRemove(post: Post) {
+                viewModel.removeById(post.id)
+            }
+        })
+        binding.container.adapter = adapter
+        viewModel.data.observe(this){
+            adapter.submitList(it)
+        }
+        viewModel.edited.observe(this) { post ->
+            if (post.id == 0) {
+                return@observe
+            }
+            with(binding.context){
+                requestFocus()
+                setText(post.content)
+            }
+        }
+
+        binding.save.setOnClickListener {
+            with(binding.context) {
+                if (text.isNullOrBlank()) {
+                    Toast.makeText(
+                        this@MainActivity,
+                        "Content can't be empty",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@setOnClickListener
+                }
+                viewModel.changeContent(text.toString())
+                viewModel.save()
+
+                setText("")
+                clearFocus()
+                AndroidUtils.hideKeyboard(this)
+            }
+        }
 
     }
-
-
+    object AndroidUtils {
+        fun hideKeyboard(view: View) {
+            val imm =
+                view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
+
+

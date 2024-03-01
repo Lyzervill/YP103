@@ -2,37 +2,72 @@ package com.btpit.up103
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.btpit.up103.databinding.PostCardBinding
 
 typealias OnLikeListener = (post: Post) -> Unit
- class PostViewHolder (
+typealias OnRemoveListener = (post: Post) -> Unit
+typealias onEditListener = (post: Post) -> Unit
+typealias onInteractionListener = (post:Post)-> Unit
+
+interface OnInteractionListener{
+    fun onLike(post: Post) {}
+    fun onEdit(post: Post) {}
+    fun onRemove(post: Post) {}
+
+}
+ class PostViewHolder(
      private val binding: PostCardBinding,
-     private val onLikeListener: OnLikeListener
+     private val onInteractionListener: OnInteractionListener
  ) : RecyclerView.ViewHolder(binding.root){
      fun  bind(post: Post) {
          binding.apply {
              textViewAutor.text = post.autor
              textViewContent.text = post.content
+             imMenu.setOnClickListener {
+                 PopupMenu(it.context, it).apply {
+                     inflate(R.menu.menu_p)
+                     setOnMenuItemClickListener { item ->
+                         when (item.itemId){
+                             R.id.remove -> {
+                                 onInteractionListener.onRemove(post)
+                                 true
+                             }
+
+                             R.id.edit->{
+                                 onInteractionListener.onEdit(post)
+                                 true
+                             }
+                             else -> false
+                         }
+
+                     }
+                 }.show()
+             }
              imageButtonLike.setImageResource(
                  if(post.likedByMe) R.drawable._589054 else R.drawable.icons8__24
              )
-             imageButtonLike.setOnClickListener{
-                 onLikeListener(post)
-             }
+            imageButtonLike.setOnClickListener {
+                onInteractionListener.onLike(post)
+            }
          }
      }
+
  }
-class PostsAdapter (
-    private  val onLikeListener: OnLikeListener
+class PostsAdapter(
+    private val     onInteractionListener: OnInteractionListener
 ) : ListAdapter<Post, PostViewHolder>(PostDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val binding = PostCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return PostViewHolder(binding, onLikeListener)
+        return PostViewHolder(binding,  onInteractionListener)
     }
+
+
+
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val post = getItem(position )
