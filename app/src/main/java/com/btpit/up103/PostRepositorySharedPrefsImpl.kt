@@ -50,13 +50,16 @@ class PostRepositorySharedPrefsImpl(
         sync()
     }
     override fun likeById(id: Long) {
-        posts = posts.map {
-            if (it.id != id.toInt()) it else it.copy(
-                likedByMe = !it.likedByMe,
-                likecount = if (it.likedByMe) it.likecount - 1 else it.likecount + 1
+        val existingPosts = data.value.orEmpty().toMutableList()
+        val index = existingPosts.indexOfFirst { it.id == id.toInt() }
+        if (index != -1) {
+            val post = existingPosts[index]
+            existingPosts[index] = post.copy(
+                likedByMe = !post.likedByMe,
+                likecount = if (post.likedByMe) post.likecount - 1 else post.likecount + 1
             )
+            save(existingPosts[index])
         }
-        data.value = posts
         sync()
     }
 

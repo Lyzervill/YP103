@@ -56,8 +56,6 @@
             android:checkable="true"
             android:contentDescription="@string/app_name"
             app:icon="@drawable/ic_like_24dp"
-            tools:checked="@sample/posts.json/data/likeById"
-            tools:text="@sample/posts.json/data/likes"
             style="@style/Widget.AppTheme.LikeCheckBox"
             />
 

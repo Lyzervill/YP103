@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import com.btpit.up103.databinding.FragmentBlank2Binding
 
 class FeedFragment : Fragment() {
@@ -50,14 +51,19 @@ class FeedFragment : Fragment() {
                     Intent.createChooser(intent, getString(R.string.error_fragment))
                 startActivity(shareIntent)
             }
+
         })
+
         binding.container.adapter = adapter
         viewModel.data.observe(viewLifecycleOwner) { posts ->
             adapter.submitList(posts)
         }
 
-
+        binding.save.setOnClickListener {
+            it.findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
+        }
 
         return binding.root
     }
+
 }

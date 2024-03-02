@@ -19,7 +19,6 @@ class PostRepositoryFileImpl(
     init {
         val file = context.filesDir.resolve(filename)
         if (file.exists()) {
-            // если файл есть - читаем
             context.openFileInput(filename).bufferedReader().use {
                 posts = gson.fromJson(it, type)
                 data.value = posts
@@ -55,14 +54,17 @@ class PostRepositoryFileImpl(
     }
 
   override  fun likeById(id: Long) {
-        posts = posts.map {
-            if (it.id != id.toInt()) it else it.copy(
-                likedByMe = !it.likedByMe,
-                likecount = if (it.likedByMe) it.likecount - 1 else it.likecount + 1
-            )
-        }
-        data.value = posts
-        sync()
+      val existingPosts = data.value.orEmpty().toMutableList()
+      val index = existingPosts.indexOfFirst { it.id == id.toInt()}
+      if (index != -1) {
+          val post = existingPosts[index]
+          existingPosts[index] = post.copy(
+              likedByMe = !post.likedByMe,
+              likecount = if (post.likedByMe) post.likecount - 1 else post.likecount + 1
+          )
+          save(existingPosts[index])
+      }
+      sync()
     }
 
     override fun getALL(): LiveData<List<Post>> {

@@ -38,6 +38,9 @@ class NewPostFragment : Fragment() {
             AndroidUtils.hideKeyboard(requireView())
             findNavController().navigateUp()
         }
+
+
         return binding.root
+
     }
 }
