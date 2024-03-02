@@ -2,16 +2,12 @@ package com.btpit.up103
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
-import com.btpit.up103.adapter.PostsAdapter
-import com.btpit.up103.databinding.FragmentFeedBinding
-import com.btpit.up103.R
-import com.btpit.up103.OnInteractionListener
+import com.btpit.up103.databinding.FragmentBlank2Binding
 
 class FeedFragment : Fragment() {
 
@@ -24,7 +20,7 @@ class FeedFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentFeedBinding.inflate(
+        val binding = FragmentBlank2Binding.inflate(
             inflater,
             container,
             false
@@ -60,9 +56,7 @@ class FeedFragment : Fragment() {
             adapter.submitList(posts)
         }
 
-        binding.fab.setOnClickListener {
-            findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
-        }
+
 
         return binding.root
     }
