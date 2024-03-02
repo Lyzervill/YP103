@@ -8,15 +8,13 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.btpit.up103.databinding.PostCardBinding
 
-typealias OnLikeListener = (post: Post) -> Unit
-typealias OnRemoveListener = (post: Post) -> Unit
-typealias onEditListener = (post: Post) -> Unit
 typealias onInteractionListener = (post:Post)-> Unit
 
 interface OnInteractionListener{
     fun onLike(post: Post) {}
     fun onEdit(post: Post) {}
     fun onRemove(post: Post) {}
+    fun onShare(post: Post) {}
 
 }
  class PostViewHolder(
@@ -52,6 +50,9 @@ interface OnInteractionListener{
             imageButtonLike.setOnClickListener {
                 onInteractionListener.onLike(post)
             }
+             imageButtonShare.setOnClickListener {
+                 onInteractionListener.onShare(post)
+             }
          }
      }
 

@@ -1,5 +1,8 @@
 package com.btpit.up103
 
+import android.content.Intent
+import android.provider.Settings.Global.getString
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,6 +12,7 @@ interface PostRepositoryInterface {
     fun LikeById(id: Int)
     fun removeById(id: Int)
     fun save(post: Post)
+
 
 
 
@@ -51,6 +55,15 @@ class PostRepositoryInMemoryImpl2 : PostRepositoryInterface {
         data.value = posts
     }
 
+    fun likeById(id: Long) {
+        posts = posts.map {
+            if (it.id != id.toInt()) it else it.copy(
+                likedByMe = !it.likedByMe,
+                likecount = if (it.likedByMe) it.likecount - 1 else it.likecount + 1
+            )
+        }
+        data.value = posts
+    }
     private var nextId1 = 0
     override fun save(post: Post) {
         val existingPosts = data.value.orEmpty().toMutableList()
@@ -66,6 +79,7 @@ class PostRepositoryInMemoryImpl2 : PostRepositoryInterface {
         }
        data.value = existingPosts
       }
+
 
 
 
