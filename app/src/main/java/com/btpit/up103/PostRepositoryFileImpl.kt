@@ -71,16 +71,8 @@ class PostRepositoryFileImpl(
         TODO("Not yet implemented")
     }
 
-    override fun LikeById(id: Int) {
-        TODO("Not yet implemented")
-    }
-
     override fun removeById(id: Int) {
-        TODO("Not yet implemented")
-    }
-
-    override fun removeById(id: Long) {
-        posts = posts.filter { it.id != id.toInt() }
+        posts = posts.filter { it.id != id }
         data.value = posts
         sync()
     }

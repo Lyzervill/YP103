@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
-import com.btpit.up103.databinding.FragmentBlank2Binding
+import com.btpit.up103.databinding.FragmentFeedBinding
 
 class FeedFragment : Fragment() {
 
@@ -21,7 +21,7 @@ class FeedFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentBlank2Binding.inflate(
+        val binding = FragmentFeedBinding.inflate(
             inflater,
             container,
             false
