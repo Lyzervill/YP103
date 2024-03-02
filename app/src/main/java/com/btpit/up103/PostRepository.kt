@@ -7,19 +7,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-interface PostRepositoryInterface {
+interface PostRepository {
     fun getALL(): LiveData<List<Post>>
     fun LikeById(id: Int)
     fun removeById(id: Int)
     fun save(post: Post)
 
 
-
-
+    fun likeById(id: Long)
+    fun removeById(id: Long)
+    fun getAll(): LiveData<List<Post>>
 }
 
 
-class PostRepositoryInMemoryImpl2 : PostRepositoryInterface {
+class PostRepositoryInMemoryImpl2 : PostRepository {
     private var posts = listOf(
         Post(
             id = 2,
@@ -55,7 +56,11 @@ class PostRepositoryInMemoryImpl2 : PostRepositoryInterface {
         data.value = posts
     }
 
-    fun likeById(id: Long) {
+    override fun removeById(id: Long) {
+        TODO("Not yet implemented")
+    }
+
+    override fun likeById(id: Long) {
         posts = posts.map {
             if (it.id != id.toInt()) it else it.copy(
                 likedByMe = !it.likedByMe,
@@ -64,6 +69,11 @@ class PostRepositoryInMemoryImpl2 : PostRepositoryInterface {
         }
         data.value = posts
     }
+
+    override fun getAll(): LiveData<List<Post>> {
+        TODO("Not yet implemented")
+    }
+
     private var nextId1 = 0
     override fun save(post: Post) {
         val existingPosts = data.value.orEmpty().toMutableList()
@@ -94,7 +104,7 @@ private val empty = Post(
     likedByMe = false
 )
 class PostViewModel : ViewModel(){
-    private val repository: PostRepositoryInterface = PostRepositoryInMemoryImpl2()
+    private val repository: PostRepository = PostRepositoryInMemoryImpl2()
     val data = repository.getALL()
     val edited = MutableLiveData(empty)
 
