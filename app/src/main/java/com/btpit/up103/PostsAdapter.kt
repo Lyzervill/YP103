@@ -25,6 +25,8 @@ interface OnInteractionListener{
          binding.apply {
              textViewAutor.text = post.autor
              textViewContent.text = post.content
+             imageButtonLike.isClickable = post.likedByMe
+             imageButtonLike.text = "${post.likecount}"
              imMenu.setOnClickListener {
                  PopupMenu(it.context, it).apply {
                      inflate(R.menu.menu_p)
