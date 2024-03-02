@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_feed">
         <action
             android:id="@+id/action_feedFragment_to_newPostFragment"
-            app:destination="@id/newPostFragment"
+
             app:enterAnim="@android:anim/fade_in"
             app:exitAnim="@android:anim/fade_out"
             app:popEnterAnim="@android:anim/fade_in"
