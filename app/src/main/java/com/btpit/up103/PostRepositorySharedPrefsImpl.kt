@@ -64,11 +64,8 @@ class PostRepositorySharedPrefsImpl(
     }
 
     override fun getALL(): LiveData<List<Post>> = data
-    override fun LikeById(id: Int) {}
 
-    override fun removeById(id: Int) {}
-
-    override fun removeById(id: Long) {
+    override fun removeById(id: Int) {
         posts = posts.filter { it.id != id.toInt() }
         data.value = posts
         sync()

@@ -4,12 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_main"
     app:startDestination="@id/feedFragment">
-
     <fragment
         android:id="@+id/feedFragment"
-        android:name="ru.netology.nmedia.activity.NewPostFragment"
-        android:label="fragment_new_post"
-        tools:layout="@layout/fragment_new_post" >
+        android:name="com.btpit.up103.FeedFragment"
+        android:label="fragment_feed"
+        tools:layout="@layout/fragment_feed" >
         <action
             android:id="@+id/action_feedFragment_to_newPostFragment"
             app:destination="@id/newPostFragment" />
@@ -17,5 +16,6 @@
     <fragment
         android:id="@+id/newPostFragment"
         android:name="com.btpit.up103.NewPostFragment"
-        android:label="NewPostFragment" />
+        android:label="fragment_new_post"
+        tools:layout="@layout/fragment_new_post" />
 </navigation>

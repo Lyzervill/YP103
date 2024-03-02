@@ -6,13 +6,9 @@ import androidx.lifecycle.ViewModel
 
 interface PostRepository {
     fun getALL(): LiveData<List<Post>>
-    fun LikeById(id: Int)
     fun removeById(id: Int)
     fun save(post: Post)
-
-
     fun likeById(id: Long)
-    fun removeById(id: Long)
     fun getAll(): LiveData<List<Post>>
 }
 
@@ -42,7 +38,7 @@ class PostRepositoryInMemoryImpl2 : PostRepository {
     private val data = MutableLiveData(posts)
 
     override fun getALL(): LiveData<List<Post>> = data
-    override fun LikeById(id: Int) {
+    fun LikeById(id: Int) {
         posts = posts.map {
             if (it.id != id) it else it.copy(likedByMe = !it.likedByMe)
         }
@@ -52,11 +48,6 @@ class PostRepositoryInMemoryImpl2 : PostRepository {
         posts = posts.filter{it.id != id}
         data.value = posts
     }
-
-    override fun removeById(id: Long) {
-        TODO("Not yet implemented")
-    }
-
     override fun likeById(id: Long) {
         val existingPosts = data.value.orEmpty().toMutableList()
         val index = existingPosts.indexOfFirst { it.id == id.toInt() }
@@ -74,12 +65,12 @@ class PostRepositoryInMemoryImpl2 : PostRepository {
         TODO("Not yet implemented")
     }
 
-    private var nextId1 = 0
+    private var nextId1 = 1
 
     override fun save(post: Post) {
         val existingPosts = data.value.orEmpty().toMutableList()
         if(post.id == 0){
-            val newPost = post.copy(id = ++nextId1)
+            val newPost = post.copy(id = nextId1++)
             existingPosts.add(0, newPost)
         }
         else{
@@ -128,7 +119,7 @@ class PostViewModel : ViewModel(){
 
     }
 
-    fun likeById(id: Int) = repository.LikeById(id)
+    fun likeById(id: Int) = repository.likeById(id.toLong())
     fun removeById(id: Int) = repository.removeById(id)
 
 

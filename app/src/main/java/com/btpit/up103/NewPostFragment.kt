@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.btpit.up103.databinding.FragmentBlankBinding
+import com.btpit.up103.databinding.FragmentNewPostBinding
 
 class NewPostFragment : Fragment() {
 
@@ -24,7 +24,8 @@ class NewPostFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentBlankBinding.inflate(
+
+        val binding = FragmentNewPostBinding.inflate(
             inflater,
             container,
             false
